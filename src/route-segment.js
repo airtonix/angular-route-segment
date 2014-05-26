@@ -4,7 +4,7 @@
 
 var mod = angular.module( 'route-segment', [] );
 mod.provider( '$routeSegment',
-        ['$routeProvider', function($routeProvider) {
+        ['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     
     var $routeSegmentProvider = this;
     
@@ -135,7 +135,8 @@ mod.provider( '$routeSegment',
     // the service factory
     this.$get = ['$rootScope', '$q', '$http', '$templateCache', '$route', '$routeParams', '$injector',
                  function($rootScope, $q, $http, $templateCache, $route, $routeParams, $injector) {
-                
+        var prefix = !$locationProvider.html5Mode()? $locationProvider.hashPrefix() : ""
+
         var $routeSegment = {    
                 
                 /**
@@ -207,7 +208,7 @@ mod.provider( '$routeSegment',
                     if(m = url.match(/\/\:([^\/]*)/))
                         throw new Error('Route param `'+m[1]+'` is not specified for route `'+segmentRoutes[segmentName]+'`');
 
-                    return url;
+                    return prefix + url;
                 }
         };    
 
